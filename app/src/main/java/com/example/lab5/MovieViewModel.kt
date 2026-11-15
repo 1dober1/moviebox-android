@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -20,6 +22,7 @@ data class MovieUi(
     val page: Int = 0,
     val totalPages: Int = 0,
     val loading: Boolean = false,
+    val saving: Boolean = false,
     val message: String = ""
 )
 
@@ -38,6 +41,8 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = (application as MovieApplication).repository
     private val ui = MutableStateFlow(MovieUi())
     private var loadJob: Job? = null
+    private val saveResults = Channel<String>(Channel.BUFFERED)
+    val saveMessages = saveResults.receiveAsFlow()
     val state = combine(ui, repository.dao.observeMovies(), repository.dao.observePersonal()) { ui, movies, personal ->
         MovieState(ui, movies, personal.associateBy { it.movieId })
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MovieState(ui.value, emptyList(), emptyMap()))
@@ -119,13 +124,23 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun savePersonal(id: Int, note: String, watched: Boolean, stars: Int) {
+        if (ui.value.saving) return
         viewModelScope.launch {
+            val wasWatched = state.value.personal[id]?.watched == true
+            ui.value = ui.value.copy(saving = true)
             try {
                 repository.savePersonal(id, note, watched, stars)
-                ui.value = ui.value.copy(message = "Сохранено")
+                saveResults.send(when {
+                    watched && wasWatched -> "Оценка и заметка обновлены. Фильм в списке «Просмотрено»."
+                    watched -> "Фильм добавлен в список «Просмотрено». Изменения сохранены."
+                    wasWatched -> "Сохранено. Фильм убран из списка «Просмотрено»."
+                    else -> "Заметка и оценка сохранены."
+                })
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
-                ui.value = ui.value.copy(message = "Не удалось сохранить заметку.")
+                saveResults.send("Не удалось сохранить изменения. Попробуйте ещё раз.")
+            } finally {
+                ui.value = ui.value.copy(saving = false)
             }
         }
     }

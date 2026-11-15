@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.material.snackbar.Snackbar
 import com.example.lab5.databinding.ActivityMovieBinding
 import java.util.Locale
 import kotlinx.coroutines.flow.collect
@@ -48,13 +49,19 @@ class MovieActivity : AppCompatActivity() {
         if (savedInstanceState == null) model.openDetails(id)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    model.saveMessages.collect { message ->
+                        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).setTextMaxLines(3).show()
+                    }
+                }
                 model.state.collect { state ->
                     binding.progress.isVisible = state.ui.loading
                     binding.status.text = state.ui.message
                     binding.status.isVisible = state.ui.message.isNotEmpty()
                     binding.retry.isEnabled = !state.ui.loading
                     val movie = state.movies.find { it.id == id }
-                    binding.save.isEnabled = movie != null
+                    binding.save.isEnabled = movie != null && !state.ui.saving
+                    binding.save.setText(if (state.ui.saving) R.string.saving else R.string.save)
                     binding.favorite.isEnabled = movie != null
                     if (movie != null && movie != displayedMovie) {
                         displayedMovie = movie
