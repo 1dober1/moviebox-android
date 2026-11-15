@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar" android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+        app:title="Детали фильма" app:navigationIcon="@android:drawable/ic_media_previous"
+        app:navigationContentDescription="@string/back" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <ProgressBar android:id="@+id/progress" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_gravity="center" />
+            <TextView android:id="@+id/status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:accessibilityLiveRegion="polite" />
+            <Button android:id="@+id/retry" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/retry" />
+            <ImageView android:id="@+id/poster" android:layout_width="match_parent" android:layout_height="300dp"
+                android:contentDescription="@string/poster" android:scaleType="fitCenter" />
+            <TextView android:id="@+id/title" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textSize="24sp" android:textStyle="bold" android:layout_marginTop="12dp" />
+            <TextView android:id="@+id/metadata" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp" />
+            <TextView android:id="@+id/overview" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textSize="16sp" />
+            <Button android:id="@+id/favorite" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/add_favorite" />
+            <EditText android:id="@+id/note" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:hint="@string/note_hint" android:inputType="textCapSentences|textMultiLine"
+                android:gravity="top" android:minLines="3" />
+            <CheckBox android:id="@+id/watched" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/watched" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/personal_rating" />
+            <RatingBar android:id="@+id/stars" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:numStars="5" android:stepSize="1" />
+            <Button android:id="@+id/clearRating" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/clear_rating" />
+            <Button android:id="@+id/save" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/save" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

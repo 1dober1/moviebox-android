@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.Lab5" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">#345CA8</item>
+        <item name="colorSecondary">#345CA8</item>
+    </style>
+</resources>

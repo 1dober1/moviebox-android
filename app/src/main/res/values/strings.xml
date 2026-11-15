@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Моя Кинотека</string>
+    <string name="popular">Популярное</string>
+    <string name="search">Поиск</string>
+    <string name="favorites">Избранное</string>
+    <string name="search_hint">Название фильма</string>
+    <string name="retry">Обновить</string>
+    <string name="more">Загрузить ещё</string>
+    <string name="add_favorite">В избранное</string>
+    <string name="remove_favorite">Убрать из избранного</string>
+    <string name="back">Назад</string>
+    <string name="note_hint">Личная заметка</string>
+    <string name="watched">Просмотрено</string>
+    <string name="personal_rating">Моя оценка (1–5 звёзд)</string>
+    <string name="save">Сохранить</string>
+    <string name="clear_rating">Сбросить оценку</string>
+    <string name="poster">Постер фильма</string>
+</resources>
