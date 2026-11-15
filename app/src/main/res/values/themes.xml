@@ -3,4 +3,7 @@
         <item name="colorPrimary">#345CA8</item>
         <item name="colorSecondary">#345CA8</item>
     </style>
+    <style name="TextAppearance.MovieNavigation" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

@@ -26,5 +26,6 @@
     </LinearLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation" android:layout_width="match_parent" android:layout_height="wrap_content"
-        app:menu="@menu/navigation" app:labelVisibilityMode="labeled" />
+        app:itemTextAppearanceActive="@style/TextAppearance.MovieNavigation"
+        app:itemTextAppearanceInactive="@style/TextAppearance.MovieNavigation" app:menu="@menu/navigation" app:labelVisibilityMode="labeled" app:itemHorizontalTranslationEnabled="false" />
 </LinearLayout>

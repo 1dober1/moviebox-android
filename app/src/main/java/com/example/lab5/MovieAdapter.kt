@@ -33,9 +33,9 @@ class MovieAdapter(private val open: (Int) -> Unit, private val favorite: (Int) 
             note.isVisible = row.showNote && row.personal != null
             note.text = row.personal?.let { personal ->
                 listOfNotNull(
-                    personal.note.takeIf(String::isNotBlank),
+                    if (personal.stars > 0) "Моя оценка: ${personal.stars}/5" else "Моя оценка: не выставлена",
                     "Просмотрено".takeIf { personal.watched },
-                    "Моя оценка: ${personal.stars}/5".takeIf { personal.stars > 0 }
+                    personal.note.takeIf(String::isNotBlank)
                 ).joinToString("\n")
             }
             favorite.setText(if (row.personal?.favorite == true) R.string.remove_favorite else R.string.add_favorite)

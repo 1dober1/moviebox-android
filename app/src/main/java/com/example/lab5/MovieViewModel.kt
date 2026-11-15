@@ -24,8 +24,10 @@ data class MovieUi(
 )
 
 data class MovieState(val ui: MovieUi, val movies: List<Movie>, val personal: Map<Int, Personal>) {
-    fun visibleMovies(): List<Movie> = if (ui.tab == 2) {
-        movies.filter { personal[it.id]?.favorite == true }.sortedBy { it.title }
+    fun visibleMovies(): List<Movie> = if (ui.tab >= 2) {
+        movies.filter {
+            if (ui.tab == 2) personal[it.id]?.favorite == true else personal[it.id]?.watched == true
+        }.sortedBy { it.title }
     } else {
         val byId = movies.associateBy { it.id }
         ui.ids.mapNotNull { byId[it] }
@@ -59,7 +61,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
     fun load(more: Boolean = false) {
         val current = ui.value
-        if (current.loading || current.tab == 2 || (current.tab == 1 && current.query.isBlank())) return
+        if (current.loading || current.tab >= 2 || (current.tab == 1 && current.query.isBlank())) return
         if (more && current.page >= current.totalPages) return
         loadJob = viewModelScope.launch {
             val page = if (more) current.page + 1 else 1
