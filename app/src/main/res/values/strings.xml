@@ -10,7 +10,7 @@
     <string name="remove_favorite">Убрать из избранного</string>
     <string name="back">Назад</string>
     <string name="note_hint">Личная заметка</string>
-    <string name="watched_movies">Просмотренные</string>
+    <string name="watched_movies">Просмотрено</string>
     <string name="watched_empty">Просмотренных фильмов пока нет. Отметьте фильм просмотренным в деталях и сохраните.</string>
     <string name="watched">Просмотрено</string>
     <string name="personal_rating">Моя оценка (1–5 звёзд)</string>
