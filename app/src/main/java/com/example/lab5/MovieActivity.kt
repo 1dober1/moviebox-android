@@ -42,6 +42,11 @@ class MovieActivity : AppCompatActivity() {
         binding.save.setOnClickListener {
             model.savePersonal(id, binding.note.text.toString(), binding.watched.isChecked, binding.stars.rating.toInt())
         }
+        binding.watched.setOnCheckedChangeListener { _, watched ->
+            binding.stars.isEnabled = watched
+            binding.clearRating.isEnabled = watched
+            if (!watched) binding.stars.rating = 0f
+        }
         binding.clearRating.setOnClickListener { binding.stars.rating = 0f }
         binding.retry.setOnClickListener { model.openDetails(id) }
         formLoaded = savedInstanceState?.getBoolean("formLoaded") ?: false
@@ -84,7 +89,7 @@ class MovieActivity : AppCompatActivity() {
                     if (!formLoaded && movie != null) {
                         binding.note.setText(personal?.note.orEmpty())
                         binding.watched.isChecked = personal?.watched == true
-                        binding.stars.rating = personal?.stars?.toFloat() ?: 0f
+                        binding.stars.rating = if (binding.watched.isChecked) personal?.stars?.toFloat() ?: 0f else 0f
                         formLoaded = true
                     }
                     binding.favorite.setText(

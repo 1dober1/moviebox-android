@@ -96,6 +96,6 @@ class MovieRepository(private val db: MovieDatabase) {
 
     suspend fun savePersonal(id: Int, note: String, watched: Boolean, stars: Int) = db.withTransaction {
         val current = dao.personal(id) ?: Personal(id)
-        dao.savePersonal(current.copy(note = note, watched = watched, stars = stars))
+        dao.savePersonal(current.copy(note = note, watched = watched, stars = if (watched) stars else 0))
     }
 }

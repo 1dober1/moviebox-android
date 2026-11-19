@@ -134,7 +134,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     watched && wasWatched -> "Оценка и заметка обновлены. Фильм в списке «Просмотрено»."
                     watched -> "Фильм добавлен в список «Просмотрено». Изменения сохранены."
                     wasWatched -> "Сохранено. Фильм убран из списка «Просмотрено»."
-                    else -> "Заметка и оценка сохранены."
+                    else -> "Заметка сохранена."
                 })
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
