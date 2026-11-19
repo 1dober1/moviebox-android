@@ -42,6 +42,7 @@ class MovieActivity : AppCompatActivity() {
         binding.save.setOnClickListener {
             model.savePersonal(id, binding.note.text.toString(), binding.watched.isChecked, binding.stars.rating.toInt())
         }
+        binding.stars.isEnabled = false
         binding.watched.setOnCheckedChangeListener { _, watched ->
             binding.stars.isEnabled = watched
             binding.clearRating.isEnabled = watched
