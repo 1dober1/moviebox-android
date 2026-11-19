@@ -18,4 +18,17 @@
     <string name="save">Сохранить</string>
     <string name="clear_rating">Сбросить оценку</string>
     <string name="poster">Постер фильма</string>
+    <string name="rating_filter">Моя оценка:</string>
+    <string name="favorites_filter">Только избранное</string>
+    <string name="note_filter">С заметкой</string>
+    <string name="watched_no_matches">Нет фильмов с выбранными фильтрами.</string>
+    <string-array name="rating_filter_options">
+        <item>Любая</item>
+        <item>Без оценки</item>
+        <item>1 звезда</item>
+        <item>2 звезды</item>
+        <item>3 звезды</item>
+        <item>4 звезды</item>
+        <item>5 звёзд</item>
+    </string-array>
 </resources>

@@ -9,6 +9,24 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchInput" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:visibility="gone" app:iconifiedByDefault="false" app:queryHint="@string/search_hint" />
+    <LinearLayout android:id="@+id/watchedFilters" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="vertical"
+        android:paddingHorizontal="12dp" android:visibility="gone">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/rating_filter" android:labelFor="@id/ratingFilter" />
+            <Spinner android:id="@+id/ratingFilter" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="48dp" android:entries="@array/rating_filter_options" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <CheckBox android:id="@+id/favoritesFilter" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="@string/favorites_filter" />
+            <CheckBox android:id="@+id/noteFilter" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="@string/note_filter" />
+        </LinearLayout>
+    </LinearLayout>
     <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent" android:layout_height="4dp" android:indeterminate="true"
         android:visibility="gone" />

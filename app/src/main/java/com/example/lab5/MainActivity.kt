@@ -2,6 +2,8 @@ package com.example.lab5
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -54,6 +56,25 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onQueryTextChange(newText: String) = false
         })
+        val filters = model.state.value.ui.watchedFilters
+        binding.ratingFilter.setSelection(filters.stars + 1)
+        binding.favoritesFilter.isChecked = filters.favoritesOnly
+        binding.noteFilter.isChecked = filters.withNote
+        fun applyWatchedFilters() {
+            model.setWatchedFilters(
+                binding.ratingFilter.selectedItemPosition - 1,
+                binding.favoritesFilter.isChecked,
+                binding.noteFilter.isChecked
+            )
+        }
+        binding.ratingFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                applyWatchedFilters()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+        binding.favoritesFilter.setOnCheckedChangeListener { _, _ -> applyWatchedFilters() }
+        binding.noteFilter.setOnCheckedChangeListener { _, _ -> applyWatchedFilters() }
         binding.retry.setOnClickListener { model.load() }
         binding.more.setOnClickListener { model.load(more = true) }
         model.start()
@@ -62,7 +83,12 @@ class MainActivity : AppCompatActivity() {
                 model.state.collect { state ->
                     val ui = state.ui
                     val movies = state.visibleMovies()
+                    val filters = ui.watchedFilters
                     binding.searchInput.isVisible = ui.tab == 1
+                    binding.watchedFilters.isVisible = ui.tab == 3
+                    binding.ratingFilter.setSelection(filters.stars + 1)
+                    binding.favoritesFilter.isChecked = filters.favoritesOnly
+                    binding.noteFilter.isChecked = filters.withNote
                     binding.progress.isVisible = ui.loading
                     binding.retry.isVisible = ui.tab < 2 && (ui.tab == 0 || ui.query.isNotEmpty())
                     binding.retry.isEnabled = !ui.loading
@@ -72,7 +98,10 @@ class MainActivity : AppCompatActivity() {
                         when {
                             ui.loading -> "Загрузка…"
                             ui.tab == 1 && ui.query.isEmpty() -> "Введите название и нажмите поиск на клавиатуре."
-                            movies.isEmpty() && ui.tab == 3 -> getString(R.string.watched_empty)
+                            movies.isEmpty() && ui.tab == 3 -> getString(
+                                if (filters.stars != -1 || filters.favoritesOnly || filters.withNote)
+                                    R.string.watched_no_matches else R.string.watched_empty
+                            )
                             movies.isEmpty() && ui.tab == 2 -> "В избранном пока нет фильмов."
                             movies.isEmpty() -> "Ничего не найдено."
                             else -> "Фильмов: ${movies.size}"

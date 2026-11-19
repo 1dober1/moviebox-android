@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
+data class WatchedFilters(val stars: Int = -1, val favoritesOnly: Boolean = false, val withNote: Boolean = false)
+
 data class MovieUi(
     val tab: Int = 0,
     val query: String = "",
@@ -23,13 +25,20 @@ data class MovieUi(
     val totalPages: Int = 0,
     val loading: Boolean = false,
     val saving: Boolean = false,
-    val message: String = ""
+    val message: String = "",
+    val watchedFilters: WatchedFilters = WatchedFilters()
 )
 
 data class MovieState(val ui: MovieUi, val movies: List<Movie>, val personal: Map<Int, Personal>) {
     fun visibleMovies(): List<Movie> = if (ui.tab >= 2) {
-        movies.filter {
-            if (ui.tab == 2) personal[it.id]?.favorite == true else personal[it.id]?.watched == true
+        val filters = ui.watchedFilters
+        movies.filter { movie ->
+            val data = personal[movie.id]
+            if (ui.tab == 2) data?.favorite == true
+            else data != null && data.watched &&
+                (filters.stars == -1 || data.stars == filters.stars) &&
+                (!filters.favoritesOnly || data.favorite) &&
+                (!filters.withNote || data.note.isNotBlank())
         }.sortedBy { it.title }
     } else {
         val byId = movies.associateBy { it.id }
@@ -54,14 +63,18 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     fun selectTab(tab: Int) {
         if (ui.value.tab == tab) return
         loadJob?.cancel()
-        ui.value = MovieUi(tab = tab)
+        ui.value = MovieUi(tab = tab, watchedFilters = ui.value.watchedFilters)
         if (tab == 0) load()
     }
 
     fun search(query: String) {
         loadJob?.cancel()
-        ui.value = MovieUi(tab = 1, query = query.trim())
+        ui.value = MovieUi(tab = 1, query = query.trim(), watchedFilters = ui.value.watchedFilters)
         if (query.isNotBlank()) load()
+    }
+
+    fun setWatchedFilters(stars: Int, favoritesOnly: Boolean, withNote: Boolean) {
+        ui.value = ui.value.copy(watchedFilters = WatchedFilters(stars, favoritesOnly, withNote))
     }
 
     fun load(more: Boolean = false) {
