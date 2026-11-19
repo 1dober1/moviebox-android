@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime())
             view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
             binding.navigation.isVisible = !insets.isVisible(WindowInsetsCompat.Type.ime())
-            WindowInsetsCompat.CONSUMED
+            insets
         }
         val adapter = MovieAdapter(
             open = { id -> startActivity(Intent(this, MovieActivity::class.java).putExtra("movieId", id)) },
